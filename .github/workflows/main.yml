@@ -42,7 +42,7 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add --all ${{ env.OUTPUT_DIR }}/*
+          git add -f --all ${{ env.OUTPUT_DIR }}/*
           git commit -m "Add changes" -a
       
       - name: Push Changed Files
