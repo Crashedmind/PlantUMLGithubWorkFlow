@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
         UML_FILES: ".puml"
+        OUTPUT_DIR: "diagrams"
     steps:
       - name: Checkout Source 
         uses: actions/checkout@v2
@@ -27,21 +28,21 @@ jobs:
       - name: Generate SVG Diagrams
         uses: cloudbees/plantuml-github-action@master
         with:
-            args: -v -tsvg *${{ env.UML_FILES }}
+            args: -v -tsvg *${{ env.UML_FILES }} -o ${{ env.OUTPUT_DIR }}
 
       - name: Generate PNG Diagrams
         uses: cloudbees/plantuml-github-action@master
         with:
-            args: -v -tpng *${{ env.UML_FILES }}
-      
+            args: -v -tpng *${{ env.UML_FILES }} -o  ${{ env.OUTPUT_DIR }}
+ 
       - name: List files
-        run: ls *${{ env.UML_FILES }}; ls *.svg; ls *.png      
+        run: ls *${{ env.UML_FILES }}; ls -o ${{ env.OUTPUT_DIR }}/*.svg; ls -o ${{ env.OUTPUT_DIR }}/*.png      
       
       - name: Commit Changed Files
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add --all
+          git add --all ${{ env.OUTPUT_DIR }}/*
           git commit -m "Add changes" -a
       
       - name: Push Changed Files
